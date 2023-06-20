@@ -44,50 +44,48 @@ class _RegisterView extends StatelessWidget {
   }
 }
 
-class RegisterForm extends StatefulWidget {
+class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});
-
-  @override
-  State<RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends State<RegisterForm> {
-  final GlobalKey<FormState> _fomrKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.watch<RegisterCubit>();
+    final username = context.watch<RegisterCubit>().state.username;
+    final password = context.watch<RegisterCubit>().state.password;
+    final email = context.watch<RegisterCubit>().state.email;
     return Form(
-        key: _fomrKey,
         child: Column(
-          children: [
-            CustomTextFormField(
-              label: 'Nombre de Usuario',
-              onChanged: registerCubit.usernameChange,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomTextFormField(
-              label: 'Correo electrónico',
-              onChanged: registerCubit.emailChange,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomTextFormField(
-              onChanged: registerCubit.passwordChange,
-              obscureText: true,
-              label: 'Contraseña',
-            ),
-            FilledButton.tonalIcon(
-              onPressed: () {
-                registerCubit.onSubmit();
-              },
-              icon: const Icon(Icons.save),
-              label: const Text('Crear usuario'),
-            )
-          ],
-        ));
+      children: [
+        CustomTextFormField(
+          label: 'Nombre de Usuario',
+          onChanged: registerCubit.usernameChange,
+          errorMessage: username.errorMessage,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        CustomTextFormField(
+          label: 'Correo electrónico',
+          onChanged: registerCubit.emailChange,
+          errorMessage: email.errorMessage,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        CustomTextFormField(
+          onChanged: registerCubit.passwordChange,
+          obscureText: true,
+          label: 'Contraseña',
+          errorMessage: password.errorMessage,
+        ),
+        FilledButton.tonalIcon(
+          onPressed: () {
+            registerCubit.onSubmit();
+          },
+          icon: const Icon(Icons.save),
+          label: const Text('Crear usuario'),
+        )
+      ],
+    ));
   }
 }
